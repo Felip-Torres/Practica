@@ -1,8 +1,9 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const usuarioRoutes = require('./routes/usuarioRutas');
-// Importa las demás rutas según sea necesario
-const sequelize = require('./config/database');  // Para asegurarte de que la base de datos esté conectada
+const tourRoutes = require('./routes/tourRutas');
+const alquilerRoutes = require('./routes/alquilerRutas');
+
+const sequelize = require('./config/database');
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -17,9 +18,8 @@ app.use((req, res, next) => {
     next();
 });
 app.use('/api/usuarios', usuarioRoutes);
-
-
-// Aquí agregarías las demás rutas para los otros modelos
+app.use('/api/tours', tourRoutes);
+app.use('/api/alquileres', alquilerRoutes);
 
 // Iniciar el servidor
 app.listen(port, async () => {

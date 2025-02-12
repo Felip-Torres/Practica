@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
 const Usuario = require('./usuario');
+const Alquiler = require('./alquiler');
 
 const Turista = sequelize.define('Turista', {
     DNI: {
@@ -18,5 +19,8 @@ const Turista = sequelize.define('Turista', {
     createdAt: 'CREATED_AT',
     updatedAt: 'UPDATED_AT'
 });
+
+Turista.hasMany(Alquiler, { foreignKey: 'DNI' });
+Alquiler.belongsTo(Turista, { foreignKey: 'DNI' });
 
 module.exports = Turista;

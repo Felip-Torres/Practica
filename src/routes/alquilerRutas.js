@@ -1,38 +1,13 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
-const Turista = require('./turista');
-const Tour = require('./tour');
-const Factura = require('./facturaRutas');
+const express = require('express');
+const router = express.Router();
+const alquilerController = require('../controllers/alquilerController');
 
-const Alquiler = sequelize.define('Alquiler', {
-    DNI: {
-        type: DataTypes.STRING(20),
-        primaryKey: true,
-        references: {
-            model: Turista,
-            key: 'DNI'
-        }
-    },
-    TourID: {
-        type: DataTypes.INTEGER,
-        primaryKey: true,
-        references: {
-            model: Tour,
-            key: 'ID'
-        }
-    },
-    FacturaID: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        references: {
-            model: Factura,
-            key: 'ID'
-        }
-    }
-}, {
-    timestamps: true,
-    createdAt: 'CREATED_AT',
-    updatedAt: 'UPDATED_AT'
-});
+// Obtener todos los tours(Puede tener filtros en el body)
+router.post('/register', alquilerController.createAlquiler);
 
-module.exports = Alquiler;
+// Obtener un alquiler por id
+router.get('/', alquilerController.getAllAlquileres);
+router.get('/:DNI/:TourID', alquilerController.getAlquilerById);
+router.delete('/:DNI/:TourID', alquilerController.deleteAlquiler);
+
+module.exports = router;

@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../config/database');
+const Alquiler = require('./alquiler');
 
 const Factura = sequelize.define('Factura', {
     ID: {
@@ -22,5 +23,8 @@ const Factura = sequelize.define('Factura', {
     createdAt: 'CREATED_AT',
     updatedAt: 'UPDATED_AT'
 });
+
+Factura.hasMany(Alquiler, { foreignKey: 'FacturaID' });
+Alquiler.belongsTo(Factura, { foreignKey: 'FacturaID' });
 
 module.exports = Factura;
