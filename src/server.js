@@ -2,8 +2,7 @@ const express = require('express');
 const usuarioRoutes = require('./routes/usuarioRutas');
 const tourRoutes = require('./routes/tourRutas');
 const alquilerRoutes = require('./routes/alquilerRutas');
-
-const sequelize = require('./config/database');
+const { sequelize } = require('./models');
 
 const app = express();
 const port = process.env.PORT || 3000;

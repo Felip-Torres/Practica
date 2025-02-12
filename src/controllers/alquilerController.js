@@ -5,7 +5,7 @@ const Factura = require('../models/factura');
 
 exports.createAlquiler = async (req, res) => {
     try {
-        const { DNI, TourID, MetodoPago } = req.body;
+        const { DNI, TourID, ID, MetodoPago } = req.body;
 
         // Verificar si el turista y el tour existen
         const turista = await Turista.findByPk(DNI);
@@ -17,6 +17,7 @@ exports.createAlquiler = async (req, res) => {
 
         // Crear la factura con los datos correctos
         const nuevaFactura = await Factura.create({
+            ID,
             MetodoPago,           // Método de pago enviado en la solicitud
             Fecha: new Date(),    // Fecha actual
             ImporteTotal: tour.Precio // Precio del tour
@@ -41,7 +42,11 @@ exports.createAlquiler = async (req, res) => {
 exports.getAllAlquileres = async (req, res) => {
     try {
         const alquileres = await Alquiler.findAll({
-            include: [Turista, Tour, Factura]
+            include: [
+                { model: Turista, as: 'Turista' },
+                { model: Tour, as: 'Tour' },
+                { model: Factura, as: 'Factura' }
+            ]
         });
         res.status(200).json(alquileres);
     } catch (error) {
