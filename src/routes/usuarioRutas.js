@@ -1,6 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const usuarioController = require('../controllers/usuarioController');
+const { auth, isAdmin } = require('../middleware/auth');
+
+// Proteger las siguientes rutas con el middleware de autenticación
+router.use(auth);
+router.use(isAdmin);
 
 // Crear un nuevo usuario
 router.post('/register', usuarioController.register);

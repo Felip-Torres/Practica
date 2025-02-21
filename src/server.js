@@ -2,14 +2,21 @@ const express = require('express');
 const usuarioRoutes = require('./routes/usuarioRutas');
 const tourRoutes = require('./routes/tourRutas');
 const alquilerRoutes = require('./routes/alquilerRutas');
+const authRouter = require('./controllers/authController');
+
 const { sequelize } = require('./models');
 
 const app = express();
 const port = process.env.PORT || 3000;
 
+
+
 // Middleware para analizar el cuerpo de las solicitudes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Rutas de autenticación
+app.use('/api/auth', authRouter);
 
 // Usar las rutas
 app.use((req, res, next) => {

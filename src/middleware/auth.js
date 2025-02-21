@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-const User = require('../models/usuario');
+const Usuario = require('../models/usuario');
+const Guia = require('../models/guia');
 
 const auth = async (req, res, next) => {
   try {
@@ -9,7 +10,7 @@ const auth = async (req, res, next) => {
     }
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findByPk(decoded.id);
+    const user = await Usuario.findByPk(decoded.id);
 
     if (!user) {
       throw new Error();
@@ -23,10 +24,15 @@ const auth = async (req, res, next) => {
 };
 
 const isAdmin = async (req, res, next) => {
-  if (req.user.role !== 'ADMIN') {
-    return res.status(403).json({ error: 'Access denied' });
+  try {
+    const guia = await Guia.findOne({ where: { DNI: req.user.DNI } });
+    if (!guia) {
+      return res.status(403).json({ error: 'Access denied' });
+    }
+    next();
+  } catch (error) {
+    res.status(500).json({ error: 'Internal server error: '+ error });
   }
-  next();
 };
 
 module.exports = { auth, isAdmin };
