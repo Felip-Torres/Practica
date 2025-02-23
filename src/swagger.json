@@ -1,0 +1,487 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "API de Usuarios",
+    "version": "1.0.0",
+    "description": "Documentación de la API con Swagger"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor local"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    }
+  },
+  "paths": {
+    "/api/auth/login": {
+      "post": {
+        "summary": "Iniciar sesión y obtener token",
+        "tags": [
+          "Autenticación"
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "Email",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Email del usuario"
+          },
+          {
+            "in": "query",
+            "name": "Password",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Contraseña del usuario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Autenticación exitosa, devuelve el usuario y el token"
+          },
+          "400": {
+            "description": "Credenciales incorrectas"
+          }
+        }
+      }
+    },
+    "/api/alquileres/register": {
+      "post": {
+        "summary": "Crear un nuevo alquiler",
+        "tags": [
+          "Alquileres"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "DNI": {
+                    "type": "string"
+                  },
+                  "TourID": {
+                    "type": "integer"
+                  },
+                  "ID": {
+                    "type": "integer"
+                  },
+                  "MetodoPago": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Alquiler creado exitosamente"
+          },
+          "400": {
+            "description": "Error en la solicitud"
+          }
+        }
+      }
+    },
+    "/api/alquileres": {
+      "get": {
+        "summary": "Obtener todos los alquileres",
+        "tags": [
+          "Alquileres"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de alquileres obtenida con éxito"
+          }
+        }
+      }
+    },
+    "/api/alquileres/{DNI}/{TourID}": {
+      "get": {
+        "summary": "Obtener un alquiler por DNI y TourID",
+        "tags": [
+          "Alquileres"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "DNI",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "DNI del usuario"
+          },
+          {
+            "in": "path",
+            "name": "TourID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID del tour alquilado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alquiler encontrado exitosamente"
+          },
+          "404": {
+            "description": "Alquiler no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar un alquiler por DNI y TourID",
+        "tags": [
+          "Alquileres"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "DNI",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "DNI del usuario"
+          },
+          {
+            "in": "path",
+            "name": "TourID",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID del tour alquilado"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Alquiler eliminado con éxito"
+          },
+          "404": {
+            "description": "Alquiler no encontrado"
+          }
+        }
+      }
+    },
+    "/api/tours": {
+      "get": {
+        "summary": "Obtener todos los tours con opción de filtrar por país, tipo, duración y precio",
+        "tags": [
+          "Tours"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "Pais",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar tours por país"
+          },
+          {
+            "in": "query",
+            "name": "Tipo",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Filtrar tours por tipo (Ejemplo: Bosque, Montaña, Playa, etc.)"
+          },
+          {
+            "in": "query",
+            "name": "duracionMin",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Duración mínima del tour en días"
+          },
+          {
+            "in": "query",
+            "name": "duracionMax",
+            "schema": {
+              "type": "integer"
+            },
+            "description": "Duración máxima del tour en días"
+          },
+          {
+            "in": "query",
+            "name": "precioMin",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Precio mínimo del tour"
+          },
+          {
+            "in": "query",
+            "name": "precioMax",
+            "schema": {
+              "type": "number"
+            },
+            "description": "Precio máximo del tour"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de tours obtenida con éxito"
+          },
+          "404": {
+            "description": "No se encontraron tours con los filtros especificados"
+          }
+        }
+      }
+    },
+    "/api/tours/{id}": {
+      "get": {
+        "summary": "Obtener un tour por su ID",
+        "tags": [
+          "Tours"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "id",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "ID del tour a obtener"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Tour encontrado exitosamente"
+          },
+          "404": {
+            "description": "Tour no encontrado"
+          }
+        }
+      }
+    },
+    "/api/usuarios/register": {
+      "post": {
+        "summary": "Crear un nuevo usuario",
+        "tags": [
+          "Usuarios"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "DNI": {
+                    "type": "string"
+                  },
+                  "Email": {
+                    "type": "string"
+                  },
+                  "Password": {
+                    "type": "string"
+                  },
+                  "Edad": {
+                    "type": "integer"
+                  },
+                  "Nombre": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuario creado exitosamente"
+          },
+          "400": {
+            "description": "Error en la solicitud"
+          }
+        }
+      }
+    },
+    "/api/usuarios": {
+      "get": {
+        "summary": "Obtener todos los usuarios",
+        "tags": [
+          "Usuarios"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de usuarios obtenida con éxito"
+          }
+        }
+      }
+    },
+    "/api/usuarios/{dni}": {
+      "get": {
+        "summary": "Obtener un usuario por DNI",
+        "tags": [
+          "Usuarios"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "DNI del usuario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario obtenido con éxito"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          }
+        }
+      },
+      "put": {
+        "summary": "Actualizar información de un usuario",
+        "tags": [
+          "Usuarios"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "DNI del usuario"
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/Usuario"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuario actualizado correctamente"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar un usuario",
+        "tags": [
+          "Usuarios"
+        ],
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "dni",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "DNI del usuario"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuario eliminado con éxito"
+          },
+          "404": {
+            "description": "Usuario no encontrado"
+          }
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Autenticación",
+      "description": "Login y generación de tokens"
+    },
+    {
+      "name": "Alquileres",
+      "description": "Operaciones relacionadas con alquileres"
+    },
+    {
+      "name": "Tours",
+      "description": "Operaciones relacionadas con los tours"
+    }
+  ]
+}

@@ -3,6 +3,7 @@ const usuarioRoutes = require('./routes/usuarioRutas');
 const tourRoutes = require('./routes/tourRutas');
 const alquilerRoutes = require('./routes/alquilerRutas');
 const authRouter = require('./controllers/authController');
+const setupSwagger = require('./config/swagger');
 
 const { sequelize } = require('./models');
 
@@ -14,6 +15,9 @@ const port = process.env.PORT || 3000;
 // Middleware para analizar el cuerpo de las solicitudes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Configurar Swagger
+setupSwagger(app);
 
 // Rutas de autenticación
 app.use('/api/auth', authRouter);

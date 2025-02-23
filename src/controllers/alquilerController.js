@@ -2,10 +2,20 @@ const Alquiler = require('../models/alquiler');
 const Turista = require('../models/turista');
 const Tour = require('../models/tour');
 const Factura = require('../models/factura');
+const Guia = require('../models/guia');
+const { sequelize } = require('../models');
 
 exports.createAlquiler = async (req, res) => {
+    const transaction = await sequelize.transaction();  // Crear la transacción
+
     try {
-        const { DNI, TourID, ID, MetodoPago } = req.body;
+        let DNI = req.body.DNI;
+        const { TourID, ID, MetodoPago } = req.body;
+
+        const guia = await Guia.findOne({ where: { DNI: req.user.DNI } });
+        if (!guia && DNI === undefined) {
+            DNI = req.user.DNI;
+        }
 
         // Verificar si el turista y el tour existen
         const turista = await Turista.findByPk(DNI);
@@ -15,24 +25,30 @@ exports.createAlquiler = async (req, res) => {
             return res.status(404).json({ message: 'Turista o Tour no encontrados' });
         }
 
-        // Crear la factura con los datos correctos
+        // Crear la factura con los datos correctos dentro de la transacción
         const nuevaFactura = await Factura.create({
             ID,
-            MetodoPago,           // Método de pago enviado en la solicitud
-            Fecha: new Date(),    // Fecha actual
-            ImporteTotal: tour.Precio // Precio del tour
-        });
+            MetodoPago,
+            Fecha: new Date(),
+            ImporteTotal: tour.Precio
+        }, { transaction });  // Pasamos la transacción aquí
 
-        // Crear el alquiler y vincular la factura generada
-        const alquiler = await Alquiler.create({ 
-            DNI, 
-            TourID, 
+        // Crear el alquiler y vincular la factura generada dentro de la misma transacción
+        const alquiler = await Alquiler.create({
+            DNI,
+            TourID,
             FacturaID: nuevaFactura.ID
-        });
+        }, { transaction });  // Pasamos la transacción aquí
+
+        // Si todo va bien, confirmamos la transacción
+        await transaction.commit();
 
         res.status(201).json({ message: 'Alquiler registrado exitosamente', alquiler, factura: nuevaFactura });
 
     } catch (error) {
+        // Si ocurre un error, hacemos un rollback para revertir todas las operaciones de la transacción
+        await transaction.rollback();
+
         console.error('Error al registrar el alquiler:', error);
         res.status(500).json({ message: 'Error al registrar el alquiler', error });
     }
