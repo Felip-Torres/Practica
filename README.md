@@ -1,6 +1,7 @@
 API de VRWorld
 
 Esta API permite gestionar usuarios, tours y alquileres, incluyendo autenticación y autorización. También cuenta con documentación en Swagger.
+
 Para ejecutar el servidor usa "node server.js" dentro de la carpeta src, o "node src/server.js" desde la carpeta del projecto clonado, si todo va bien deberian salirte un mensaje con el puerto y un enlace a la documentacion de swagger, desde donde puedes ejecutar todas las rutas
 
 Tecnologías Usadas
