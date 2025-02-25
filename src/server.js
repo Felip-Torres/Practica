@@ -10,8 +10,6 @@ const { sequelize } = require('./models');
 const app = express();
 const port = process.env.PORT || 3000;
 
-
-
 // Middleware para analizar el cuerpo de las solicitudes
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -24,7 +22,7 @@ app.use('/api/auth', authRouter);
 
 // Usar las rutas
 app.use((req, res, next) => {
-    console.log("🔍 BODY RECIBIDO EN EL SERVIDOR:", req.body);
+    console.log("BODY RECIBIDO EN EL SERVIDOR:", req.body);
     next();
 });
 app.use('/api/usuarios', usuarioRoutes);

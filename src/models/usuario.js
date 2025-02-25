@@ -42,7 +42,6 @@ Usuario.beforeSave(async (user) => {
 Usuario.prototype.generateAuthToken = function() {
     const user = this;
     const token = jwt.sign({ id: user.DNI, role: user.role }, process.env.JWT_SECRET, { expiresIn: '1h' });
-    console.log(token);
     return token;
 };
 

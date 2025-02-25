@@ -42,7 +42,7 @@ const swaggerSpec = swaggerJSDoc(options);
 const setupSwagger = (app) => {
     saveSwaggerSpec();  // Genera el archivo
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-    console.log('📄 Documentación disponible en: http://localhost:3000/api-docs');
+    console.log('Documentación disponible en: http://localhost:3000/api-docs');
 };
 
 module.exports = setupSwagger;

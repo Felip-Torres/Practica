@@ -2,7 +2,6 @@ const express = require('express');
 const Usuario = require('../models/usuario');
 const router = express.Router();
 
-//eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjAxMjM0NTY3SiIsImlhdCI6MTc0MDI2MjAwMSwiZXhwIjoxNzQwMjY1NjAxfQ.9EJx0w1uqrymHU2l2ZgotQHvvQgHh6avoZFC5bvCRCc
 /**
  * @swagger
  * tags:
